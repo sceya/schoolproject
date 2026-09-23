@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async>
+    </script>
+    <title>Математика — Главная</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #EFE7DA;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .sidebar {
+            width: 260px;
+            background-color: #EFE7DA;
+            border-right: 1px solid #cccccc;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            flex-shrink: 0;
+        }
+
+        .sidebar a {
+            display: inline-block;
+            text-decoration: none;
+            color: #000000;
+            font-size: 14pt;
+            font-family: 'Times New Roman', Times, serif;
+            padding: 10px 16px;
+            border-radius: 12px;
+            transition: background-color 0.2s ease;
+            width: fit-content;
+        }
+
+        .sidebar a:hover {
+            background-color: #f3c3c5;
+        }
+
+        .sidebar a.active {
+            background-color: #f3c3c5;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px 60px;
+            text-align: justify;
+            position: relative;
+        }
+
+        .main-content h1 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 30pt;
+            text-align: center;
+            color: #000000;
+            margin-bottom: 20pt;
+        }
+
+        .hotkeys {
+            display: flex;
+            justify-content: center;
+            gap: 20pt;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .hotkeys a {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 14pt;
+            color: #000000;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 8px;
+            transition: background-color 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .hotkeys a:hover {
+            background-color: #f3c3c5;
+        }
+
+        .section-title {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 18pt;
+            color: #000000;
+            margin-bottom: 20pt;
+        }
+
+        .topic-list {
+            list-style: none;
+            padding: 0;
+            max-width: 480px;
+        }
+
+        .topic-list li {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 14pt;
+            color: #000000;
+            margin-bottom: 20pt;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: background-color 0.25s ease;
+        }
+
+        .topic-list li:hover {
+            background-color: rgba(243, 195, 197, 0.3);
+        }
+
+        /* ---------- карточка-подсказка ---------- */
+        .preview-card {
+            position: fixed;
+            right: 40px;
+            top: 50%;
+            transform: translateY(-50%) translateX(20px);
+            width: 440px;
+            max-height: 70vh;
+            overflow-y: auto;
+            background-color: #DCEDC8;
+            border: 2px solid #c5dba8;
+            border-radius: 20px;
+            padding: 28px 24px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.35s ease, visibility 0.35s ease, transform 0.35s ease;
+            z-index: 50;
+        }
+        .preview-card.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(-50%) translateX(0);
+        }
+        .preview-card .preview-title {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 18pt;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 12pt;
+        }
+        .preview-card .preview-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 20pt;
+            color: #222222;
+            line-height: 1.5;
+            margin-bottom: 14pt;
+        }
+        .preview-card .preview-example {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 20pt;
+            color: #333333;
+            line-height: 1.7;
+        }
+
+        /* ---------- сердечки за курсором ---------- */
+        .cursor-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            animation: cursorHeartFade 1.2s ease-out forwards;
+        }
+        .cursor-heart::before,
+        .cursor-heart::after {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 8px;
+            background-color: #f3c3c5;
+            border-radius: 5px 5px 0 0;
+        }
+        .cursor-heart::before {
+            left: 0;
+            top: 0;
+            transform: rotate(-45deg);
+            transform-origin: bottom right;
+        }
+        .cursor-heart::after {
+            right: 0;
+            top: 0;
+            transform: rotate(45deg);
+            transform-origin: bottom left;
+        }
+        @keyframes cursorHeartFade {
+            0% { opacity: 0.8; transform: translateY(0) scale(1) rotate(0deg); }
+            50% { opacity: 0.4; transform: translateY(-10px) scale(0.8) rotate(15deg); }
+            100% { opacity: 0; transform: translateY(-25px) scale(0.2) rotate(-10deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <a href="index.html" class="active">Главная</a>
+        <a href="theory.html">Теория</a>
+        <a href="test-basic.html">Тест базовый уровень</a>
+        <a href="test-medium.html">Тест средний уровень</a>
+        <a href="test-hard.html">Тест сложный уровень</a>
+        <a href="calculator.html">Калькулятор</a>
+        <a href="videos.html">Видеоуроки</a>
+    </aside>
+
+    <main class="main-content">
+        <h1>степень с рациональным показателем</h1>
+
+        <div class="hotkeys">
+            <a href="theory.html#section1">степень с рациональным показателем</a>
+            <a href="theory.html#section2">степень с действительным показателем</a>
+            <a href="theory.html#section3">показательная функция</a>
+            <a href="theory.html#section4">техника решений</a>
+        </div>
+
+        <p class="section-title">Здесь вы узнаете:</p>
+        <ul class="topic-list" id="topicList">
+            <li data-topic="0">Основа: корень n-й степени</li>
+            <li data-topic="1">Дробная степень</li>
+            <li data-topic="2">Все свойства степеней</li>
+            <li data-topic="3">Смысл иррационального показателя</li>
+            <li data-topic="4">Определение через предел</li>
+            <li data-topic="5">Единое правило</li>
+            <li data-topic="6">Вид и область определения</li>
+            <li data-topic="7">Характер монотонности</li>
+            <li data-topic="8">Показательные уравнения</li>
+            <li data-topic="9">Показательные неравенства</li>
+            <li data-topic="10">Преобразование выражений</li>
+        </ul>
+    </main>
+
+    <!-- КАРТОЧКА-ПОДСКАЗКА -->
+    <div class="preview-card" id="previewCard">
+        <div class="preview-title" id="previewTitle"></div>
+        <div class="preview-text" id="previewText"></div>
+        <div class="preview-example" id="previewExample"></div>
+    </div>
+
+    <script>
+        // Данные для карточек
+        const topicData = [
+            {
+                title: 'Основа: корень n-й степени',
+                text: 'Корень n-й степени из a — это число, которое в степени n даёт a. Если n чётное, под корнем должно быть неотрицательное число. Если n нечётное, под корнем может быть любое число.',
+                example: '\\(\\sqrt[3]{-8} = -2\\), потому что \\((-2)^3 = -8\\)<br>\\(\\sqrt[4]{16} = 2\\), потому что \\(2^4 = 16\\)'
+            },
+            {
+                title: 'Дробная степень',
+                text: 'Знаменатель дроби — это показатель корня, числитель — степень подкоренного выражения.',
+                example: '\\(a^{\\frac{m}{n}} = \\sqrt[n]{a^m}\\)<br><br>\\(8^{\\frac{2}{3}} = \\sqrt[3]{8^2} = \\sqrt[3]{64} = 4\\)<br>Или: \\(\\sqrt[3]{8} = 2\\), затем \\(2^2 = 4\\)'
+            },
+            {
+                title: 'Все свойства степеней',
+                text: 'Пять правил: умножение — сложение показателей, деление — вычитание, степень в степень — умножение показателей, степень произведения и степень частного.',
+                example: '\\(a^{\\frac{1}{2}} \\cdot a^{\\frac{1}{3}} = a^{\\frac{5}{6}}\\)<br>\\(\\dfrac{b^{\\frac{3}{4}}}{b^{\\frac{1}{2}}} = b^{\\frac{1}{4}}\\)<br>\\((x^{\\frac{2}{5}})^{10} = x^4\\)'
+            },
+            {
+                title: 'Смысл иррационального показателя',
+                text: 'Иррациональный показатель нельзя записать дробью, поэтому степень вычисляют через приближение. Чем точнее приближение, тем ближе ответ.',
+                example: '\\(2^{\\sqrt{2}}\\) считаем через \\(2^{1{,}4}\\), \\(2^{1{,}41}\\), \\(2^{1{,}414}\\)…'
+            },
+            {
+                title: 'Определение через предел',
+                text: 'Степень с иррациональным показателем — это предел последовательности степеней с рациональными показателями.',
+                example: '\\(3^{\\pi}\\) — предел: \\(3^{3{,}1}\\), \\(3^{3{,}14}\\), \\(3^{3{,}141}\\), \\(3^{3{,}1415}\\)…<br>Каждый шаг точнее.'
+            },
+            {
+                title: 'Единое правило',
+                text: 'Основание должно быть строго больше нуля. Иначе выражение теряет смысл или становится неоднозначным.',
+                example: '\\(5^{\\sqrt{3}}\\) — имеет смысл<br>\\((-2)^{\\sqrt{3}}\\) — не имеет смысла'
+            },
+            {
+                title: 'Вид и область определения',
+                text: 'Показательная функция: \\(y = a^x\\), где \\(a > 0\\), \\(a \\neq 1\\). x — любое число. y всегда положителен.',
+                example: 'Для \\(y = 3^x\\):<br>Область определения — \\(\\mathbb{R}\\)<br>Область значений — \\((0; +\\infty)\\)'
+            },
+            {
+                title: 'Характер монотонности',
+                text: 'Если \\(a > 1\\) — функция возрастает. Если \\(0 < a < 1\\) — функция убывает.',
+                example: '\\(2^x\\) растёт, \\((0{,}5)^x\\) убывает<br>\\(2^3 > 2^2\\), но \\((0{,}5)^3 < (0{,}5)^2\\)'
+            },
+            {
+                title: 'Показательные уравнения',
+                text: 'Приводим обе части к одному основанию и приравниваем показатели.',
+                example: '\\(3^{x-1} = 27\\) → \\(3^{x-1} = 3^3\\)<br>\\(x-1 = 3\\) → \\(x = 4\\)'
+            },
+            {
+                title: 'Показательные неравенства',
+                text: 'Приводим к одному основанию. Если основание > 1 — знак сохраняется. Если 0 < основание < 1 — знак меняется.',
+                example: '\\((0{,}5)^x > (0{,}5)^3\\) → \\(x < 3\\)<br>\\(2^x > 2^3\\) → \\(x > 3\\)'
+            },
+            {
+                title: 'Преобразование выражений',
+                text: 'Все корни записываем как степени с дробным показателем, числа раскладываем на простые основания.',
+                example: '\\(\\sqrt[3]{a} \\cdot \\sqrt{a} = a^{\\frac{1}{3}} \\cdot a^{\\frac{1}{2}} = a^{\\frac{5}{6}}\\)<br>\\(\\dfrac{x \\cdot \\sqrt[4]{x^3}}{\\sqrt{x}} = x^{\\frac{5}{4}}\\)'
+            }
+        ];
+
+        const previewCard = document.getElementById('previewCard');
+        const previewTitle = document.getElementById('previewTitle');
+        const previewText = document.getElementById('previewText');
+        const previewExample = document.getElementById('previewExample');
+        const topicItems = document.querySelectorAll('#topicList li');
+
+        let currentTopic = -1;
+        let hideTimeout;
+
+        function showCard(topicIndex) {
+            const data = topicData[topicIndex];
+            previewTitle.textContent = data.title;
+            previewText.textContent = data.text;
+            previewExample.innerHTML = data.example;
+            previewCard.classList.add('visible');
+            // Перерисовать формулы
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                MathJax.typesetPromise([previewExample]);
+            }
+        }
+
+        topicItems.forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                clearTimeout(hideTimeout);
+                const topicIndex = parseInt(this.dataset.topic);
+                if (topicIndex !== currentTopic) {
+                    currentTopic = topicIndex;
+                    showCard(topicIndex);
+                } else {
+                    previewCard.classList.add('visible');
+                }
+            });
+
+            item.addEventListener('mouseleave', function() {
+                hideTimeout = setTimeout(() => {
+                    previewCard.classList.remove('visible');
+                    currentTopic = -1;
+                }, 250);
+            });
+        });
+
+        previewCard.addEventListener('mouseenter', function() {
+            clearTimeout(hideTimeout);
+        });
+
+        previewCard.addEventListener('mouseleave', function() {
+            previewCard.classList.remove('visible');
+            currentTopic = -1;
+        });
+
+        // Сердечки за курсором
+        let heartTimeout;
+        const hearts = [];
+        document.addEventListener('mousemove', function(e) {
+            if (heartTimeout) return;
+            heartTimeout = setTimeout(() => { heartTimeout = null; }, 80);
+            const heart = document.createElement('div');
+            heart.className = 'cursor-heart';
+            heart.style.left = (e.clientX - 3) + 'px';
+            heart.style.top = (e.clientY - 4) + 'px';
+            const size = 4 + Math.random() * 6;
+            heart.style.width = size + 'px';
+            heart.style.height = size + 'px';
+            document.body.appendChild(heart);
+            hearts.push(heart);
+            heart.addEventListener('animationend', function() {
+                heart.remove();
+                const idx = hearts.indexOf(heart);
+                if (idx > -1) hearts.splice(idx, 1);
+            });
+            if (hearts.length > 30) {
+                const old = hearts.shift();
+                old.remove();
+            }
+        });
+    </script>
+
+</body>
+</html>

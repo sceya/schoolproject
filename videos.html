@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Математика — Видеоуроки</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #EFE7DA;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .sidebar {
+            width: 260px;
+            background-color: #EFE7DA;
+            border-right: 1px solid #cccccc;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            flex-shrink: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 10;
+        }
+        .sidebar a {
+            display: inline-block;
+            text-decoration: none;
+            color: #000000;
+            font-size: 14pt;
+            font-family: 'Times New Roman', Times, serif;
+            padding: 10px 16px;
+            border-radius: 12px;
+            transition: background-color 0.2s ease;
+            width: fit-content;
+        }
+        .sidebar a:hover {
+            background-color: #f3c3c5;
+        }
+        .sidebar a.active {
+            background-color: #f3c3c5;
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 40px 60px 100px 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .main-content h1 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 30pt;
+            text-align: center;
+            color: #000000;
+            margin-bottom: 40pt;
+        }
+        .video-list {
+            display: flex;
+            flex-direction: column;
+            gap: 30pt;
+            max-width: 700px;
+            width: 100%;
+        }
+        .video-link {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #000000;
+            transition: transform 0.2s ease;
+            position: relative;
+        }
+        .video-link:hover {
+            transform: translateX(6px);
+        }
+        .video-link:hover .video-line {
+            background-color: #e8aeb0;
+        }
+        .video-link:hover .video-title {
+            color: #000000;
+        }
+        .video-line {
+            flex: 1;
+            height: 1px;
+            background-color: #f3c3c5;
+            transition: background-color 0.2s ease;
+        }
+        .video-title {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 16pt;
+            color: #333333;
+            padding: 0 24px;
+            white-space: nowrap;
+            transition: color 0.2s ease;
+        }
+        .video-icon {
+            font-size: 20pt;
+            padding: 0 8px;
+        }
+
+        /* ---------- сердечки за курсором ---------- */
+        .cursor-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            animation: cursorHeartFade 1.2s ease-out forwards;
+        }
+        .cursor-heart::before,
+        .cursor-heart::after {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 8px;
+            background-color: #f3c3c5;
+            border-radius: 5px 5px 0 0;
+        }
+        .cursor-heart::before {
+            left: 0;
+            top: 0;
+            transform: rotate(-45deg);
+            transform-origin: bottom right;
+        }
+        .cursor-heart::after {
+            right: 0;
+            top: 0;
+            transform: rotate(45deg);
+            transform-origin: bottom left;
+        }
+        @keyframes cursorHeartFade {
+            0% { opacity: 0.8; transform: translateY(0) scale(1) rotate(0deg); }
+            50% { opacity: 0.4; transform: translateY(-10px) scale(0.8) rotate(15deg); }
+            100% { opacity: 0; transform: translateY(-25px) scale(0.2) rotate(-10deg); }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <a href="index.html">Главная</a>
+        <a href="theory.html">Теория</a>
+        <a href="test-basic.html">Тест базовый уровень</a>
+        <a href="test-medium.html">Тест средний уровень</a>
+        <a href="test-hard.html">Тест сложный уровень</a>
+        <a href="calculator.html">Калькулятор</a>
+        <a href="videos.html" class="active">Видеоуроки</a>
+    </aside>
+
+    <main class="main-content">
+        <h1>видеоуроки</h1>
+
+        <div class="video-list">
+            <a class="video-link" href="https://youtu.be/tRWovbJl-AE?si=CzRChxvPaETJGX8R" target="_blank">
+                <span class="video-line"></span>
+                <span class="video-title">Степень числа с рациональным показателем</span>
+                <span class="video-line"></span>
+            </a>
+
+            <a class="video-link" href="https://youtu.be/zkq4xfb56Ro?si=UlSJR2gFIkgBmuu8" target="_blank">
+                <span class="video-line"></span>
+                <span class="video-title">Степень с рациональным показателем. Практика</span>
+                <span class="video-line"></span>
+            </a>
+
+            <a class="video-link" href="https://youtu.be/Z2Wr2VYu52U?si=jYiL05PANTUZlQix" target="_blank">
+                <span class="video-line"></span>
+                <span class="video-title">Корень n-ой степени и его свойства</span>
+                <span class="video-line"></span>
+            </a>
+
+            <a class="video-link" href="https://youtu.be/bMkL12mnA04?si=3sx-0LGF7xmcM9WI" target="_blank">
+                <span class="video-line"></span>
+                <span class="video-title">Корень n-ой степени. Практическая часть</span>
+                <span class="video-line"></span>
+            </a>
+
+            <a class="video-link" href="https://www.youtube.com/live/4LxIb1vPVWg?si=1Kh9xe0cE91tnZQq" target="_blank">
+                <span class="video-line"></span>
+                <span class="video-title">Корни n-й степени. Вебинар</span>
+                <span class="video-line"></span>
+            </a>
+        </div>
+    </main>
+
+    <script>
+        // Сердечки за курсором
+        let heartTimeout;
+        const hearts = [];
+        document.addEventListener('mousemove', function(e) {
+            if (heartTimeout) return;
+            heartTimeout = setTimeout(() => { heartTimeout = null; }, 80);
+            const heart = document.createElement('div');
+            heart.className = 'cursor-heart';
+            heart.style.left = (e.clientX - 3) + 'px';
+            heart.style.top = (e.clientY - 4) + 'px';
+            const size = 4 + Math.random() * 6;
+            heart.style.width = size + 'px';
+            heart.style.height = size + 'px';
+            document.body.appendChild(heart);
+            hearts.push(heart);
+            heart.addEventListener('animationend', function() {
+                heart.remove();
+                const idx = hearts.indexOf(heart);
+                if (idx > -1) hearts.splice(idx, 1);
+            });
+            if (hearts.length > 30) {
+                const old = hearts.shift();
+                old.remove();
+            }
+        });
+    </script>
+
+</body>
+</html>

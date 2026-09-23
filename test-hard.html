@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']]
+            }
+        };
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async>
+    </script>
+    <title>Математика — Тест сложный уровень</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #EFE7DA;
+            display: flex;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .sidebar {
+            width: 260px;
+            background-color: #EFE7DA;
+            border-right: 1px solid #cccccc;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            flex-shrink: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 10;
+        }
+        .sidebar a {
+            display: inline-block;
+            text-decoration: none;
+            color: #000000;
+            font-size: 14pt;
+            font-family: 'Times New Roman', Times, serif;
+            padding: 10px 16px;
+            border-radius: 12px;
+            transition: background-color 0.2s ease;
+            width: fit-content;
+        }
+        .sidebar a:hover {
+            background-color: #f3c3c5;
+        }
+        .sidebar a.active {
+            background-color: #f3c3c5;
+        }
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 40px 60px 100px 60px;
+            text-align: justify;
+        }
+        .main-content h1 {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 30pt;
+            text-align: center;
+            color: #000000;
+            margin-bottom: 30pt;
+        }
+        .task-block {
+            margin-bottom: 24pt;
+            padding: 16pt 20pt;
+            border-left: 3px solid #f3c3c5;
+            background-color: rgba(243, 195, 197, 0.08);
+            border-radius: 0 8px 8px 0;
+            position: relative;
+        }
+        .task-number {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 14pt;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 8pt;
+        }
+        .task-text {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 14pt;
+            color: #000000;
+            line-height: 1.7;
+            margin-bottom: 10pt;
+        }
+        .answer-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .answer-wrapper {
+            position: relative;
+            flex: 1;
+            max-width: 500px;
+        }
+        .answer-input {
+            width: 100%;
+            padding: 10px 14px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 14pt;
+            border: 2px solid #cccccc;
+            border-radius: 8px;
+            background-color: #ffffff;
+            color: #000000;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+        .answer-input:focus {
+            border-color: #f3c3c5;
+        }
+        .math-panel {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: #ffffff;
+            border: 2px solid #f3c3c5;
+            border-radius: 12px;
+            padding: 10px;
+            z-index: 200;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            gap: 6px;
+            max-width: 520px;
+            flex-wrap: wrap;
+        }
+        .math-panel.visible {
+            display: flex;
+        }
+        .math-btn {
+            width: 38px;
+            height: 38px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 15pt;
+            background-color: #f3c3c5;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #000000;
+            transition: background-color 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .math-btn:hover {
+            background-color: #e8aeb0;
+        }
+        .math-btn.long {
+            width: auto;
+            padding: 0 10px;
+            font-size: 12pt;
+        }
+        .hint-btn {
+            padding: 10px 14px;
+            background-color: transparent;
+            border: 2px solid #f3c3c5;
+            border-radius: 8px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            color: #000000;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .hint-btn:hover {
+            background-color: rgba(243, 195, 197, 0.3);
+        }
+        .hint-text {
+            display: none;
+            margin-top: 8pt;
+            padding: 10px 14px;
+            background-color: rgba(243, 195, 197, 0.15);
+            border-radius: 8px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 13pt;
+            color: #555555;
+            font-style: italic;
+        }
+        .hint-text.visible {
+            display: block;
+        }
+        .check-btn {
+            display: inline-block;
+            margin-top: 30pt;
+            padding: 12px 30px;
+            background-color: #f3c3c5;
+            border: none;
+            border-radius: 24px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 16pt;
+            color: #000000;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .check-btn:hover {
+            background-color: #e8aeb0;
+        }
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20pt;
+            display: none;
+        }
+        .results-table.visible {
+            display: table;
+        }
+        .results-table th, .results-table td {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 14pt;
+            padding: 10px 14px;
+            border: 1px solid #cccccc;
+            text-align: center;
+        }
+        .results-table th {
+            background-color: #EFE7DA;
+            font-weight: bold;
+        }
+        .correct-bg {
+            background-color: #9c9f69;
+            color: #000000;
+        }
+        .wrong-bg {
+            background-color: #cb4c46;
+            color: #ffffff;
+        }
+        .view-answer-btn {
+            display: inline-block;
+            padding: 6px 14px;
+            background-color: #f3c3c5;
+            border: none;
+            border-radius: 14px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            color: #000000;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .view-answer-btn:hover {
+            background-color: #e8aeb0;
+        }
+        .result-summary {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 16pt;
+            font-weight: bold;
+            margin-top: 16pt;
+            text-align: center;
+        }
+        .task-link {
+            color: #000000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .task-link:hover {
+            text-decoration: underline;
+        }
+        .scroll-to-top {
+            position: fixed;
+            right: 16px;
+            bottom: 30px;
+            width: 44px;
+            height: 44px;
+            background-color: rgba(243, 195, 197, 0.3);
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s ease;
+        }
+        .scroll-to-top:hover {
+            background-color: rgba(243, 195, 197, 0.6);
+        }
+        .scroll-to-top::after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            border-left: 3px solid #f3c3c5;
+            border-top: 3px solid #f3c3c5;
+            transform: rotate(45deg);
+            margin-top: 4px;
+        }
+
+        /* ===== СЛЕД ИЗ СЕРДЕЧЕК ЗА КУРСОРОМ ===== */
+        .cursor-heart {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            animation: cursorHeartFade 1.2s ease-out forwards;
+        }
+        .cursor-heart::before,
+        .cursor-heart::after {
+            content: '';
+            position: absolute;
+            width: 5px;
+            height: 8px;
+            background-color: #f3c3c5;
+            border-radius: 5px 5px 0 0;
+        }
+        .cursor-heart::before {
+            left: 0;
+            top: 0;
+            transform: rotate(-45deg);
+            transform-origin: bottom right;
+        }
+        .cursor-heart::after {
+            right: 0;
+            top: 0;
+            transform: rotate(45deg);
+            transform-origin: bottom left;
+        }
+        @keyframes cursorHeartFade {
+            0% {
+                opacity: 0.8;
+                transform: translateY(0) scale(1) rotate(0deg);
+            }
+            50% {
+                opacity: 0.4;
+                transform: translateY(-10px) scale(0.8) rotate(15deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-25px) scale(0.2) rotate(-10deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <a href="index.html">Главная</a>
+        <a href="theory.html">Теория</a>
+        <a href="test-basic.html">Тест базовый уровень</a>
+        <a href="test-medium.html">Тест средний уровень</a>
+        <a href="test-hard.html" class="active">Тест сложный уровень</a>
+        <a href="calculator.html">Калькулятор</a>
+        <a href="videos.html">Видеоуроки</a>
+    </aside>
+
+    <button class="scroll-to-top" id="scrollToTopBtn" title="Наверх"></button>
+
+    <main class="main-content">
+        <h1>тест сложный уровень</h1>
+
+        <button class="check-btn" id="checkBtn">проверить ответы</button>
+
+        <table class="results-table" id="resultsTable">
+            <thead>
+                <tr>
+                    <th>№ задания</th>
+                    <th>Результат</th>
+                    <th>Верный ответ</th>
+                </tr>
+            </thead>
+            <tbody id="resultsBody">
+            </tbody>
+        </table>
+        <p class="result-summary" id="resultSummary"></p>
+    </main>
+
+    <script>
+        // ===== ДАННЫЕ ЗАДАНИЙ =====
+        const tasks = [
+            {
+                id: 1,
+                text: 'Вычислите \\(\\left( \\sqrt[3]{4} \\cdot \\sqrt{8} \\right)^{\\frac{6}{5}}\\).',
+                hint: 'Приведите все корни к степеням с основанием 2.',
+                answers: ['8']
+            },
+            {
+                id: 2,
+                text: 'Упростите \\(\\dfrac{a^{\\frac{3}{2}} - 8}{a^{\\frac{1}{2}} - 2} - a^{\\frac{1}{2}}\\).',
+                hint: 'Числитель раскладывается как разность кубов.',
+                answers: ['2']
+            },
+            {
+                id: 3,
+                text: 'Вычислите \\(\\dfrac{3^{\\sqrt{5}} \\cdot 9^{\\sqrt{5}}}{27^{\\sqrt{5} - 1}}\\).',
+                hint: 'Приведите все степени к основанию 3 и сложите показатели.',
+                answers: ['27']
+            },
+            {
+                id: 4,
+                text: 'Решите уравнение \\(2^{x} + 4^{x} = 20\\).',
+                hint: 'Представьте \\(4^x\\) как \\((2^x)^2\\) и сделайте замену.',
+                answers: ['2']
+            },
+            {
+                id: 5,
+                text: 'Найдите значение выражения \\(\\dfrac{x^{\\frac{4}{3}} - x^{\\frac{1}{3}} \\cdot y}{x^{\\frac{1}{3}} - y^{\\frac{1}{3}}} \\cdot \\dfrac{1}{x^{\\frac{1}{3}}}\\) при \\(x = 8\\), \\(y = 1\\).',
+                hint: 'Вынесите \\(x^{\\frac{1}{3}}\\) за скобки в числителе первой дроби, а затем разложите разность кубов.',
+                answers: ['3']
+            },
+            {
+                id: 6,
+                text: 'Сравните числа \\(2^{\\sqrt{3}}\\) и \\(3^{\\sqrt{2}}\\).',
+                hint: 'Возведите оба числа в степень \\(\\sqrt{6}\\) и сравните результаты.',
+                answers: ['2^{\\sqrt{3}} < 3^{\\sqrt{2}}', '2^\\sqrt{3} < 3^\\sqrt{2}', '2^{\\sqrt{3}}<3^{\\sqrt{2}}']
+            },
+            {
+                id: 7,
+                text: 'Решите неравенство \\(5^{|x-2|} \\leq 25\\).',
+                hint: 'Приведите правую часть к основанию 5 и рассмотрите два случая для модуля.',
+                answers: ['x \\in [0; 4]', '[0; 4]', '0 \\leq x \\leq 4', '0<=x<=4', 'x \\in [0, 4]']
+            },
+            {
+                id: 8,
+                text: 'Упростите \\(\\sqrt[3]{ \\dfrac{a}{b} \\cdot \\sqrt[4]{ \\dfrac{b}{a} } } \\cdot \\sqrt[12]{a^5 b}\\).',
+                hint: 'Запишите все корни как степени с дробными показателями, начните с самого внутреннего корня.',
+                answers: ['a^{1/2}', 'a^(1/2)', 'a^{\\frac{1}{2}}', '\\sqrt{a}']
+            },
+            {
+                id: 9,
+                text: 'Известно, что \\(a^{\\frac{1}{2}} + a^{-\\frac{1}{2}} = 4\\). Найдите \\(a + a^{-1}\\).',
+                hint: 'Возведите данное равенство в квадрат.',
+                answers: ['14']
+            },
+            {
+                id: 10,
+                text: 'Решите уравнение \\(x^{\\frac{2}{3}} - 3x^{\\frac{1}{3}} - 10 = 0\\).',
+                hint: 'Сделайте замену \\(t = x^{\\frac{1}{3}}\\) и решите квадратное уравнение. Не забудьте, что \\(t\\) может принимать любые действительные значения.',
+                answers: ['125, -8', '125 и -8', '125; -8', '-8; 125', '-8, 125', '125,-8', 'x=125, x=-8', 'x = 125, x = -8']
+            }
+        ];
+
+        // ===== ПОСТРОЕНИЕ ЗАДАНИЙ =====
+        const mainContent = document.querySelector('.main-content');
+        const checkBtn = document.getElementById('checkBtn');
+
+        tasks.forEach(task => {
+            const block = document.createElement('div');
+            block.className = 'task-block';
+            block.id = 'task' + task.id;
+
+            const number = document.createElement('p');
+            number.className = 'task-number';
+            number.textContent = 'Задание ' + task.id;
+
+            const text = document.createElement('p');
+            text.className = 'task-text';
+            text.innerHTML = task.text;
+
+            const answerRow = document.createElement('div');
+            answerRow.className = 'answer-row';
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'answer-wrapper';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.className = 'answer-input';
+            input.id = 'input' + task.id;
+            input.placeholder = 'Введите ответ';
+            input.autocomplete = 'off';
+
+            const panel = document.createElement('div');
+            panel.className = 'math-panel';
+            panel.id = 'panel' + task.id;
+
+            const symbols = [
+                '^', '√', 'frac', '{', '}', '(', ')', '[', ']',
+                'x', 'y', 'a', 'b', 'c', 'm', 'n', 'p',
+                '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                '+', '-', '⋅', '/', '=', '<', '>', '±', '|',
+                ',', '.', '←'
+            ];
+
+            symbols.forEach(sym => {
+                const btn = document.createElement('button');
+                btn.className = 'math-btn';
+                if (sym === 'frac') btn.classList.add('long');
+                btn.textContent = sym;
+                btn.type = 'button';
+                btn.addEventListener('mousedown', function(e) {
+                    e.preventDefault();
+                    const inp = document.getElementById('input' + task.id);
+                    const start = inp.selectionStart;
+                    const end = inp.selectionEnd;
+                    const val = inp.value;
+
+                    let insertion = sym;
+                    if (sym === 'frac') insertion = '\\frac{}{}';
+                    if (sym === '←') {
+                        inp.value = val.slice(0, start - 1) + val.slice(end);
+                        inp.focus();
+                        inp.setSelectionRange(start - 1, start - 1);
+                        return;
+                    }
+
+                    inp.value = val.slice(0, start) + insertion + val.slice(end);
+                    inp.focus();
+                    const newPos = start + insertion.length;
+                    inp.setSelectionRange(newPos, newPos);
+                });
+                panel.appendChild(btn);
+            });
+
+            wrapper.appendChild(input);
+            wrapper.appendChild(panel);
+
+            const hintBtn = document.createElement('button');
+            hintBtn.className = 'hint-btn';
+            hintBtn.textContent = 'подсказка';
+            hintBtn.type = 'button';
+
+            const hintText = document.createElement('p');
+            hintText.className = 'hint-text';
+            hintText.id = 'hint' + task.id;
+            hintText.textContent = task.hint;
+
+            hintBtn.addEventListener('click', function() {
+                if (hintText.classList.contains('visible')) {
+                    hintText.classList.remove('visible');
+                    hintBtn.textContent = 'подсказка';
+                } else {
+                    hintText.classList.add('visible');
+                    hintBtn.textContent = 'скрыть подсказку';
+                }
+            });
+
+            answerRow.appendChild(wrapper);
+            answerRow.appendChild(hintBtn);
+
+            block.appendChild(number);
+            block.appendChild(text);
+            block.appendChild(answerRow);
+            block.appendChild(hintText);
+            mainContent.insertBefore(block, checkBtn);
+
+            input.addEventListener('focus', function() {
+                document.querySelectorAll('.math-panel.visible').forEach(p => {
+                    if (p !== panel) p.classList.remove('visible');
+                });
+                panel.classList.add('visible');
+            });
+
+            input.addEventListener('blur', function() {
+                setTimeout(() => {
+                    if (!panel.contains(document.activeElement)) {
+                        panel.classList.remove('visible');
+                    }
+                }, 150);
+            });
+        });
+
+        // ===== НОРМАЛИЗАЦИЯ ОТВЕТА =====
+        function normalize(str) {
+            return str
+                .replace(/\s+/g, '')
+                .replace(/,/g, '.')
+                .replace(/\\/g, '')
+                .replace(/frac/g, '')
+                .replace(/[{}]/g, '')
+                .replace(/sqrt\[(\d+)\]/g, 'root$1')
+                .toLowerCase()
+                .replace(/×/g, '*')
+                .replace(/÷/g, '/')
+                .replace(/cdot/g, '*')
+                .replace(/ldots/g, '');
+        }
+
+        // ===== ПРОВЕРКА ОТВЕТОВ =====
+        checkBtn.addEventListener('click', function() {
+            const resultsBody = document.getElementById('resultsBody');
+            const resultsTable = document.getElementById('resultsTable');
+            const resultSummary = document.getElementById('resultSummary');
+            resultsBody.innerHTML = '';
+            let correctCount = 0;
+
+            tasks.forEach(task => {
+                const userInput = document.getElementById('input' + task.id).value;
+                const normalizedUser = normalize(userInput);
+                const isCorrect = task.answers.some(ans => normalize(ans) === normalizedUser);
+
+                const row = document.createElement('tr');
+                const cellNum = document.createElement('td');
+                const cellResult = document.createElement('td');
+                const cellAnswer = document.createElement('td');
+
+                const taskLink = document.createElement('a');
+                taskLink.href = '#task' + task.id;
+                taskLink.className = 'task-link';
+                taskLink.textContent = task.id;
+                cellNum.appendChild(taskLink);
+
+                if (isCorrect) {
+                    cellResult.textContent = 'верно';
+                    cellResult.className = 'correct-bg';
+                    cellAnswer.innerHTML = '\\( ' + (userInput || task.answers[0]) + ' \\)';
+                    correctCount++;
+                } else {
+                    cellResult.textContent = 'неверно';
+                    cellResult.className = 'wrong-bg';
+                    const correctAns = task.answers[0];
+                    const viewBtn = document.createElement('button');
+                    viewBtn.className = 'view-answer-btn';
+                    viewBtn.textContent = 'посмотреть ответ?';
+                    viewBtn.addEventListener('click', function() {
+                        viewBtn.remove();
+                        cellAnswer.innerHTML = '\\( ' + correctAns + ' \\)';
+                        MathJax.typesetPromise([cellAnswer]);
+                    });
+                    cellAnswer.appendChild(viewBtn);
+                }
+
+                row.appendChild(cellNum);
+                row.appendChild(cellResult);
+                row.appendChild(cellAnswer);
+                resultsBody.appendChild(row);
+            });
+
+            resultsTable.classList.add('visible');
+            const percent = Math.round((correctCount / tasks.length) * 100);
+            resultSummary.textContent = 'Правильных ответов: ' + correctCount + ' из ' + tasks.length + ' (' + percent + '%)';
+            resultsTable.scrollIntoView({ behavior: 'smooth' });
+
+            MathJax.typesetPromise([resultsTable]);
+        });
+
+        // ===== КНОПКА НАВЕРХ =====
+        document.getElementById('scrollToTopBtn').addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+
+        // ===== СЛЕД ИЗ СЕРДЕЧЕК ЗА КУРСОРОМ =====
+        let heartTimeout;
+        const hearts = [];
+
+        document.addEventListener('mousemove', function(e) {
+            if (heartTimeout) return;
+            heartTimeout = setTimeout(() => { heartTimeout = null; }, 80);
+
+            const heart = document.createElement('div');
+            heart.className = 'cursor-heart';
+            heart.style.left = (e.clientX - 3) + 'px';
+            heart.style.top = (e.clientY - 4) + 'px';
+
+            const size = 4 + Math.random() * 6;
+            heart.style.width = size + 'px';
+            heart.style.height = size + 'px';
+
+            document.body.appendChild(heart);
+            hearts.push(heart);
+
+            heart.addEventListener('animationend', function() {
+                heart.remove();
+                const idx = hearts.indexOf(heart);
+                if (idx > -1) hearts.splice(idx, 1);
+            });
+
+            if (hearts.length > 30) {
+                const old = hearts.shift();
+                old.remove();
+            }
+        });
+    </script>
+</body>
+</html>
